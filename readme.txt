@@ -24,7 +24,7 @@ to start backend -  npm i --- to  install node modules and then "node index.js".
 implemented two methods of cropping ////image using react-cropper and react easy crop
 
 using react-router - image saved in database with cloudinary.
-using react-easy-crop  -- image save directly backend upload folder inside routes
+using react-easy-crop  -- image saved in database with cloudinary.
 
 
 

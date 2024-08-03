@@ -5,7 +5,7 @@ const cloudinary = require('cloudinary').v2;
 const mongoose = require('mongoose');
 const fs = require('fs');
 const path = require('path');
-const Image = require('../model/imageModel'); // Adjust this according to your actual model import
+const imageModel = require('../model/imageModel');
 
 // Configure Cloudinary
 cloudinary.config({
@@ -26,8 +26,10 @@ const upload = multer({
 
 // Route to fetch all images
 router.get('/images', async (req, res) => {
+   
+    
     try {
-        const images = await Image.find().sort({createdAt:-1});
+        const images = await imageModel.find().sort({createdAt:-1});
         res.json(images);
     } catch (err) {
         res.status(500).json({ message: 'Error fetching images', err });
@@ -35,35 +37,52 @@ router.get('/images', async (req, res) => {
 });
 
 
-router.post('/upload', (req, res) => {
+router.post('/upload', async (req, res) => {
     const { image } = req.body;
-    
+
     if (!image) {
-      return res.status(400).send('No image provided');
+        return res.status(400).send('No image provided');
     }
-  
-    // Decode the base64 image string
-    const buffer = Buffer.from(image, 'base64');
-    
-    // Generate a unique filename
-    const filename = `image-${Date.now()}.jpeg`;
-    
-    // Define the path to save the image
-    const filePath = path.join(__dirname, 'uploads', filename);
-    
-    // Ensure the 'uploads' directory exists
-    fs.mkdirSync(path.join(__dirname, 'uploads'), { recursive: true });
-    
-    // Save the image to the filesystem
-    fs.writeFile(filePath, buffer, (err) => {
-      if (err) {
-        console.error('Error saving the image:', err);
-        return res.status(500).send('Error saving the image');
-      }
-      
-      res.status(200).send('Image uploaded successfully');
-    });
-  });
+
+    try {
+        // Decode the base64 image string
+        const buffer = Buffer.from(image, 'base64');
+        
+        // Create a stream for Cloudinary upload
+        const uploadStream = cloudinary.uploader.upload_stream({
+            folder: 'uploads',
+            format: 'jpg' // Ensure the image is saved with .jpg extension
+        }, async (error, result) => {
+            if (error) {
+                console.error('Error uploading to Cloudinary:', error);
+                return res.status(500).send('Error uploading image to Cloudinary');
+            }
+
+            try {
+                // Save image URL in MongoDB
+                const imageDoc = new imageModel({
+                    url: result.secure_url
+                });
+
+                await imageDoc.save();
+                res.status(200).json({ message: 'Image uploaded successfully', imageUrl: result.secure_url });
+            } catch (dbError) {
+                console.error('Error saving image to MongoDB:', dbError);
+                res.status(500).send('Error saving image to database');
+            }
+        });
+
+        // Convert the file buffer to a stream and pipe it to Cloudinary
+        const stream = require('stream');
+        const bufferStream = new stream.PassThrough();
+        bufferStream.end(buffer);
+        bufferStream.pipe(uploadStream);
+
+    } catch (err) {
+        console.error('Error processing the image:', err);
+        res.status(500).send('Error processing the image');
+    }
+});
 
 // for coludinary data storage and the method used react-croper in front end use the below code /////
 
