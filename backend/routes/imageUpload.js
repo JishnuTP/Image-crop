@@ -26,10 +26,9 @@ const upload = multer({
 
 // Route to fetch all images
 router.get('/images', async (req, res) => {
-   
-    
+     
     try {
-        const images = await imageModel.find().sort({createdAt:-1});
+        const images = await imageModel.find().sort({createdAt:-1});// sorting to get latest 
         res.json(images);
     } catch (err) {
         res.status(500).json({ message: 'Error fetching images', err });

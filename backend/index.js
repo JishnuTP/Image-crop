@@ -3,7 +3,7 @@ const app = express();
 const cors = require('cors');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
-const UploadRoutes = require('./routes/imageUpload'); // Adjust path as needed
+const UploadRoutes = require('./routes/imageUpload');
 
 // Middleware setup
 app.use(cors());
