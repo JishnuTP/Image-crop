@@ -38,7 +38,7 @@ const Uploader = () => {
       const formData = new FormData();
       formData.append('image', blob);
 
-      const uploadResponse = await axios.post('https://image-crop-api.vercel.app/api/upload', formData, {
+      const uploadResponse = await axios.post('http://localhost:5000/api/upload', formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
         },

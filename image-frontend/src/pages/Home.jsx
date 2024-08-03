@@ -10,7 +10,7 @@ const Home = () => {
         // Fetch images from backend
         const fetchImages = async () => {
             try {
-                const response = await axios.get('https://image-crop-api.vercel.app/api/images');
+                const response = await axios.get('http://localhost:5000/api/images');
                 const fetchedImages = response.data;
 
                 // Find the latest image
