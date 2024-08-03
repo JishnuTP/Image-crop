@@ -3,10 +3,11 @@ const app = express();
 const cors = require('cors');
 const UploadRoutes = require('./routes/imageUpload'); // Adjust path as needed
 const mongoose= require("mongoose")
+const bodyParser = require('body-parser');
 app.use(cors());
 app.use(express.json());
 
-
+app.use(bodyParser.json({ limit: '10mb' })); 
 
 // Test route
 app.get("/", (req, res) => {

@@ -21,13 +21,18 @@ to start frontend -  npm i --- to  install node modules and then "npm run dev".
 to start backend -  npm i --- to  install node modules and then "node index.js". (or nodemon index.js)
 
 
+implemented two methods of cropping ////image using react-cropper and react easy crop
 
 
-instruction to use
+
+instruction to use react -cropper method -- uncommad the line of code in backend route for upload and command the existing upload route
+ and also in front end uploader do the same
 
 after start front end it navigate to a landing page with upload images and also latest cropped image can see there.
 
 and click upload new page appears and it show select file ===> upload image.===> crop image ==> submit
+
+
 
 
 
