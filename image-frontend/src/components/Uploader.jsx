@@ -95,7 +95,7 @@ const Uploader = () => {
         )}
         <button 
           onClick={handleCrop} 
-          className="bg-blue-500 text-white px-4 py-2 rounded shadow hover:bg-blue-600 transition"
+          className="bg-blue-500 text-white flex px-4 py-2 rounded shadow hover:bg-blue-600 transition"
         >
           Crop
         </button>
